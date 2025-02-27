@@ -2,6 +2,7 @@ services:
   frontend:
     build: .
     ports:
-      - "3000:3000"
+      - "3000:80"
     environment:
-      - VITE_API_URL=https://energy-production-3537.up.railway.app
+      - VITE_API_URL="https://energy-production-3537.up.railway.app"
+    restart: always

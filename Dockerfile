@@ -1,27 +1,29 @@
-# Stage 1: Build the SvelteKit app
+# Use node for building
 FROM node:18-alpine AS build
 
+# Set working directory
 WORKDIR /app
 
-# Copy package files and install dependencies
-COPY package.json package-lock.json ./
+# Copy package files
+COPY package.json package-lock.json tsconfig.json ./
+
+# Install dependencies
 RUN npm install
 
-# Copy all project files and build
+# Copy all files
 COPY . .
+
+# Build the SvelteKit app
 RUN npm run build
 
-# Stage 2: Run the built SvelteKit app
-FROM node:18-alpine
-WORKDIR /app
+# Use lightweight Nginx to serve static files
+FROM nginx:alpine
 
-# Copy built app from the previous stage
-COPY --from=build /app/build /app/build
-COPY --from=build /app/package.json /app/package.json
-COPY --from=build /app/node_modules /app/node_modules
+# Copy built files to Nginx public directory
+COPY . .
 
-# Expose frontend port
-EXPOSE 3000
+# Expose port
+EXPOSE 80
 
-# Run the app
-CMD ["node", "build"]
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
