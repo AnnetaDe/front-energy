@@ -1,7 +1,6 @@
 import axios from "axios";
 
-// const API = import.meta.env.API_URL
-const API = "https://energy-production-3537.up.railway.app"
+const API = import.meta.env.VITE_API_URL as string;
 
 export const _api = axios.create({
     baseURL: API,

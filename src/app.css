@@ -13,3 +13,22 @@ label {
     font-size: x-small;
     width: 72px
 }
+
+input {
+    @apply border border-gray-300;
+    @apply rounded-md;
+    @apply focus:outline-none;
+    @apply focus:border-fuchsia-500;
+}
+
+h2 {
+    @apply text-2xl;
+    @apply font-bold;
+    @apply text-gray-700;
+}
+
+h1 {
+    @apply text-3xl;
+    @apply font-bold;
+    @apply text-gray-900;
+}

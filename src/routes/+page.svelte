@@ -35,39 +35,53 @@
 </script>
 
 <div class="container mx-auto p-4">
-	<h1>📊 Energy Data</h1>
+	<h1 class="mb-2">📊 Energy Data</h1>
+	<div class="container mx-auto p-4">
+		<h2 class="mb-2">Choose range</h2>
 
-	<form
-		on:submit|preventDefault={fetchData}
-		class="form flex max-w-md flex-col gap-2 rounded-lg bg-gray-300 p-4"
-	>
-		<div class=" flex items-center gap-4">
-			<label for="start_date">From</label>
-			<input id="start_date" type="date" bind:value={start_date} required />
-			<label for="start_hour">Start Hour:</label>
-			<input id="start_hour" type="time" bind:value={start_hour} />
+		<form
+			on:submit|preventDefault={fetchData}
+			class="form flex max-w-md flex-col gap-2 rounded-lg bg-gray-300 p-4"
+		>
+			<div class=" flex items-center gap-4">
+				<label for="start_date">From</label>
+				<input id="start_date" type="date" bind:value={start_date} required />
+				<label for="start_hour">Start Hour:</label>
+				<input id="start_hour" type="time" bind:value={start_hour} />
+			</div>
+
+			<div class="flex items-center gap-4">
+				<label for="end_date">To:</label>
+				<input id="end_date" type="date" bind:value={end_date} required />
+
+				<label for="end_hour">End Hour:</label>
+				<input id="end_hour" type="time" bind:value={end_hour} />
+			</div>
+
+			<button
+				type="submit"
+				class="rounded-md bg-fuchsia-700 px-4 py-2 text-white hover:bg-fuchsia-900 focus:outline-none"
+				>Fetch Data</button
+			>
+		</form>
+	</div>
+
+	{#if loading}
+		<p>Loading...</p>
+	{:else if displayData.length}
+		<div class="container mx-auto p-4">
+			<h2 class="mb-2">Results</h2>
+			<ul class="flex max-w-md flex-col gap-2 rounded-lg bg-gray-300 p-4 text-sm">
+				{#each displayData as entry}
+					<li class="flex justify-between bg-gray-100 p-2">
+						<span class="text-md bg-gray-200 p-2">{entry.date}</span>
+						<span class="p-2">{entry.heures}</span>
+						<span class="text-md bg-gray-200 p-2">{entry.consommation}</span>
+					</li>
+				{/each}
+			</ul>
 		</div>
-
-		<div class="flex items-center gap-4">
-			<label for="end_date">To:</label>
-			<input id="end_date" type="date" bind:value={end_date} required />
-
-			<label for="end_hour">End Hour:</label>
-			<input id="end_hour" type="time" bind:value={end_hour} />
-		</div>
-
-		<button type="submit" class="w-24 rounded-xs bg-lime-500 p-2">Fetch Data</button>
-	</form>
+	{:else}
+		<p>No data available.</p>
+	{/if}
 </div>
-
-{#if loading}
-	<p>Loading...</p>
-{:else if displayData.length}
-	<ul>
-		{#each displayData as entry}
-			<li>{entry.date} - {entry.heures} - {entry.consommation}</li>
-		{/each}
-	</ul>
-{:else}
-	<p>No data available.</p>
-{/if}
