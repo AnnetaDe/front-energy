@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@plugin '@tailwindcss/forms';
+
+
+body {
+    @apply bg-gray-100;
+    @apply text-gray-900;
+}
+
+label {
+    @apply text-gray-500;
+    font-size: x-small;
+    width: 72px
+}
