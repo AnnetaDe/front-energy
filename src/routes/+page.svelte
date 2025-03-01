@@ -17,6 +17,7 @@
 	let offset: number;
 	let page: number;
 	let total_pages: number;
+	let total_consumption: number;
 	$: params = {
 		start_date: start_date,
 		end_date: end_date,
@@ -53,6 +54,7 @@
 					page = result.rangeData.page;
 					total_pages = result.rangeData.total_pages;
 					offset = result.rangeData.offset;
+					total_consumption = result.rangeData.total;
 				}
 			}
 		} catch (error) {
@@ -95,6 +97,11 @@
 	{:else if noDataMessage === false && displayData.length > 0}
 		<div class="container mx-auto p-4">
 			<h2 class="mb-2">Results</h2>
+			<div class="mb-2 flex max-w-md justify-between rounded-lg bg-gray-300 p-2">
+				<p>Page: {page}</p>
+				<p>Total Pages: {total_pages}</p>
+				<p>Total Energy: {total_consumption}</p>
+			</div>
 			<ul class="flex max-w-md flex-col gap-2 rounded-lg bg-gray-300 p-4 text-sm">
 				{#each displayData as entry}
 					<li class="flex justify-between bg-gray-100 p-2">
