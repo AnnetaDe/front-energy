@@ -1,16 +1,13 @@
 <script lang="ts">
 	import { _getRange } from '$lib/api_operations';
 	import ButtonPagination from '$lib/ButtonPagination.svelte';
+	import DateForm from '$lib/DateForm.svelte';
 	import CustomDatePicker from '$lib/CustomDatePicker.svelte';
-	import { writable } from 'svelte/store';
 
 	let start_date = '2021-01-01';
 	let end_date = start_date;
 	let start_hour = '00:00:00';
 	let end_hour = '23:59:00';
-	$: if (!end_date || end_date < start_date) {
-		end_date = start_date;
-	}
 
 	/**@type {{ date: string, heures: string, consommation: number }[]}*/
 	let displayData: { date: string; heures: string; consommation: number }[] = [];
@@ -30,7 +27,7 @@
 	};
 
 	/**
-	 * @param {{ start_date: string, end_date: string, start_hour: string, end_hour: string, limit: number, offset: number }}
+	 * @param {{ start_date: string, end_date: string, start_hour: string, end_hour: string, limit?: number, offset?: number }}
 	 */
 	async function fetchData(params: {
 		start_date: string;
@@ -66,15 +63,15 @@
 	}
 
 	function nextPage() {
-		params.offset += per_page;
+		offset = offset + per_page;
 		params = { ...params };
-		fetchData(params);
+		fetchData({ ...params, offset });
 	}
 
 	function prevPage() {
-		params.offset -= per_page;
-		params = { ...params };
-		fetchData(params);
+		if (offset <= 0) return;
+		offset = offset - per_page;
+		fetchData({ ...params, offset });
 	}
 </script>
 
@@ -82,40 +79,13 @@
 	<h1 class="mb-2">📊 Energy Data</h1>
 	<div class="container mx-auto p-4">
 		<h2 class="mb-2">Choose range</h2>
-
-		<form
-			on:submit|preventDefault={() => fetchData(params)}
-			class="form flex max-w-md flex-col gap-2 rounded-lg bg-gray-300 p-4"
-		>
-			<div class=" flex items-center gap-4">
-				<label for="start_date">From</label>
-				<input
-					id="start_date"
-					type="date"
-					defaultValue={start_date}
-					bind:value={start_date}
-					min="2021-01-01"
-					max="2022-12-31"
-					required
-				/>
-				<label for="start_hour">Start Hour:</label>
-				<input id="start_hour" type="time" bind:value={start_hour} />
-			</div>
-
-			<div class="flex items-center gap-4">
-				<label for="end_date">To:</label>
-				<input id="end_date" type="date" bind:value={end_date} min="2021-01-01" max="2022-12-31" />
-
-				<label for="end_hour">End Hour:</label>
-				<input id="end_hour" type="time" bind:value={end_hour} />
-			</div>
-
-			<button
-				type="submit"
-				class="rounded-md bg-fuchsia-700 px-4 py-2 text-white hover:bg-fuchsia-900 focus:outline-none"
-				>Fetch Data
-			</button>
-		</form>
+		<DateForm
+			{start_date}
+			{end_date}
+			{start_hour}
+			{end_hour}
+			onSubmit={(data) => fetchData({ ...data, limit: per_page, offset: 0 })}
+		/>
 	</div>
 
 	{#if loading}
