@@ -1,12 +1,13 @@
 <script lang="ts">
-	export const paginationNext = (): void => {};
+	export let text = 'Click me';
+	export let onClick = () => {};
+	export let className = 'bg-fuchsia-700 hover:bg-fuchsia-900';
 </script>
 
 <button
-	class="rounded-md bg-fuchsia-700 px-4 py-2 text-white hover:bg-fuchsia-900 focus:outline-none"
-	on:click={() => {
-		paginationNext();
-	}}
+	type="submit"
+	on:click={onClick}
+	class={`rounded-md px-4 py-2 text-white focus:outline-none ${className}`}
 >
-	next page
+	{text}
 </button>

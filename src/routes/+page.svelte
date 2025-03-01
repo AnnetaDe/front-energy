@@ -65,9 +65,15 @@
 		}
 	}
 
-	export function paginationNext() {
+	function nextPage() {
 		params.offset += per_page;
-		params = { ...params, start_date, end_date, start_hour, end_hour, limit: per_page };
+		params = { ...params };
+		fetchData(params);
+	}
+
+	function prevPage() {
+		params.offset -= per_page;
+		params = { ...params };
 		fetchData(params);
 	}
 </script>
@@ -130,29 +136,12 @@
 			</ul>
 		</div>
 
-		{#if offset > 0}
-			<button
-				class="rounded-md bg-fuchsia-700 px-4 py-2 text-white hover:bg-fuchsia-900 focus:outline-none"
-				on:click={() => {
-					params.offset -= per_page;
-					params = { ...params };
-					fetchData(params);
-				}}
-			>
-				previous page
-			</button>
+		{#if !(total_pages <= 1 || page === total_pages)}
+			<ButtonPagination text="Next Page" onClick={nextPage} />
 		{/if}
-		{#if total_pages > 1 && page < total_pages}
-			<button
-				class="rounded-md bg-fuchsia-700 px-4 py-2 text-white hover:bg-fuchsia-900 focus:outline-none"
-				on:click={() => {
-					params.offset += per_page;
-					params = { ...params };
-					fetchData(params);
-				}}
-			>
-				next page
-			</button>
+
+		{#if !(total_pages <= 1 || page === 1)}
+			<ButtonPagination text="Previous Page" onClick={prevPage} />
 		{/if}
 	{/if}
 </div>
