@@ -1,5 +1,7 @@
 import { _api } from "./api";
 import type { RangeParams } from "./types";
+import type { RangeResponse } from "./types";
+
 
 
 
@@ -26,9 +28,14 @@ export async function _getRange(endpoint: "range", params: RangeParams) {
         };
 
         const res = await _api.get(`/${endpoint}`, { params: queryParams });
-        return { rangeData: res.data };
+        const rangeData: RangeResponse = res.data;
+        return { rangeData };
     } catch (error) {
-        console.error("API Error:", error);
-        return { rangeData: [] };
+        console.error("API Fetch Error:", error);
+        throw new Error("API Error" + error);
     }
+
+
+
+
 }

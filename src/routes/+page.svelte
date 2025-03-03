@@ -2,7 +2,6 @@
 	import { _getRange } from '$lib/api_operations';
 	import ButtonPagination from '$lib/ButtonPagination.svelte';
 	import DateForm from '$lib/DateForm.svelte';
-	import CustomDatePicker from '$lib/CustomDatePicker.svelte';
 
 	let start_date = '2021-01-01';
 	let end_date = start_date;
