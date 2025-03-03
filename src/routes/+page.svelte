@@ -2,6 +2,7 @@
 	import { _getRange } from '$lib/api_operations';
 	import ButtonPagination from '$lib/ButtonPagination.svelte';
 	import DateForm from '$lib/DateForm.svelte';
+	import { Spinner } from 'flowbite-svelte';
 
 	let start_date = '2021-01-01';
 	let end_date = start_date;
@@ -44,8 +45,8 @@
 			let result = await _getRange('range', params);
 
 			console.log('result:', result);
-			if (result) {
-				displayData = result.rangeData.data;
+			if (result && result.rangeData) {
+				displayData = result.rangeData.data || [];
 				if (displayData.length === 0) {
 					noDataMessage = true;
 				} else {
@@ -57,7 +58,7 @@
 				}
 			}
 		} catch (error) {
-			console.error('oops:', error);
+			throw new Error("Couldn't fetch data");
 		} finally {
 			loading = false;
 		}
@@ -90,7 +91,7 @@
 	</div>
 
 	{#if loading}
-		<p>Loading...</p>
+		<Spinner />
 	{:else if noDataMessage}
 		<p>No data available for the selected range.</p>
 	{:else if noDataMessage === false && displayData.length > 0}
