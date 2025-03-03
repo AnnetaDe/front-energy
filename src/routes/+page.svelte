@@ -13,7 +13,7 @@
 	let displayData: { date: string; heures: string; consommation: number }[] = [];
 	let loading = false;
 	let noDataMessage = false;
-	let per_page = 12;
+	let per_page = 24;
 	let offset: number;
 	let page: number;
 	let total_pages: number;
@@ -77,9 +77,9 @@
 	}
 </script>
 
-<div class="container mx-auto p-4">
+<div class=" container mx-auto p-4">
 	<h1 class="mb-2">📊 Energy Data</h1>
-	<div class="container mx-auto p-4">
+	<div class="mb-2">
 		<h2 class="mb-2">Choose range</h2>
 		<DateForm
 			{start_date}
@@ -95,30 +95,35 @@
 	{:else if noDataMessage}
 		<p>No data available for the selected range.</p>
 	{:else if noDataMessage === false && displayData.length > 0}
-		<div class="container mx-auto p-4">
+		<div class="mb-2">
 			<h2 class="mb-2">Results</h2>
-			<div class="mb-2 flex max-w-md justify-between rounded-lg bg-gray-300 p-2">
+			<div class="mb-2 flex-col justify-between rounded-lg bg-gray-300 p-2 text-xs sm:max-w-md">
 				<p>Page: {page}</p>
 				<p>Total Pages: {total_pages}</p>
 				<p>Total Energy: {total_consumption}</p>
 			</div>
-			<ul class="flex max-w-md flex-col gap-2 rounded-lg bg-gray-300 p-4 text-sm">
-				{#each displayData as entry}
-					<li class="flex justify-between bg-gray-100 p-2">
-						<span class="text-md bg-gray-200 p-2">{entry.date}</span>
-						<span class="p-2">{entry.heures}</span>
-						<span class="text-md bg-gray-200 p-2">{entry.consommation}</span>
-					</li>
-				{/each}
-			</ul>
+			<div class="mb-2 rounded-lg bg-gray-300 p-4 sm:max-w-md">
+				<ul
+					class="flex max-h-72 flex-col gap-1 overflow-y-auto rounded-lg bg-gray-300 sm:max-w-md sm:gap-1"
+				>
+					{#each displayData as entry}
+						<li class=" flex justify-between bg-gray-100 p-1 text-xs sm:text-sm">
+							<span class="text-md bg-gray-200 p-1">{entry.date}</span>
+							<span class="p-2">{entry.heures}</span>
+							<span class="text-md bg-gray-200 p-1">{entry.consommation}</span>
+						</li>
+					{/each}
+				</ul>
+			</div>
+
+			<div class="mb-2">
+				{#if !(total_pages <= 1 || page === 1)}
+					<ButtonPagination text="Previous Page" onClick={prevPage} />
+				{/if}
+				{#if !(total_pages <= 1 || page === total_pages)}
+					<ButtonPagination text="Next Page" onClick={nextPage} />
+				{/if}
+			</div>
 		</div>
-
-		{#if !(total_pages <= 1 || page === total_pages)}
-			<ButtonPagination text="Next Page" onClick={nextPage} />
-		{/if}
-
-		{#if !(total_pages <= 1 || page === 1)}
-			<ButtonPagination text="Previous Page" onClick={prevPage} />
-		{/if}
 	{/if}
 </div>

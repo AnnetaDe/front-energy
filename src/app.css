@@ -36,6 +36,8 @@ input {
     @apply rounded-md;
     @apply focus:outline-none;
     @apply focus:border-fuchsia-500;
+    @apply focus:ring-1;
+    @apply w-full;
 }
 
 h2 {

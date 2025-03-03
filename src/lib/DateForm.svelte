@@ -21,9 +21,9 @@
 
 <form
 	on:submit|preventDefault={() => onSubmit({ start_date, end_date, start_hour, end_hour })}
-	class="form flex max-w-md flex-col gap-2 rounded-lg bg-gray-300 p-4"
+	class=" form mb-4 flex max-w-sm flex-col gap-2 rounded-lg bg-gray-300 p-4 sm:max-w-md sm:gap-6"
 >
-	<div class="flex items-center gap-4">
+	<div class="items-left flex flex-col gap-4 sm:flex-row">
 		<label for="start_date">From</label>
 		<input
 			id="start_date"
@@ -38,7 +38,7 @@
 		<input id="start_hour" type="time" bind:value={start_hour} />
 	</div>
 
-	<div class="flex items-center gap-4">
+	<div class="items-left flex flex-col gap-4 sm:flex-row">
 		<label for="end_date">To:</label>
 		<input id="end_date" type="date" bind:value={end_date} min={min_date} max={max_date} />
 
