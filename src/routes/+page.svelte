@@ -102,9 +102,14 @@
 				<p>Total Pages: {total_pages}</p>
 				<p>Total Energy: {total_consumption}</p>
 			</div>
-			<div class="mb-2 rounded-lg bg-gray-300 p-4 sm:max-w-md">
+			<div class="mb-2 bg-gray-300 p-2 sm:max-w-md">
+				<div class="flex justify-between bg-gray-300 p-1 text-xs sm:text-sm">
+					<p class="text-xs sm:text-sm">Date</p>
+					<p class="text-xs sm:text-sm">Heures</p>
+					<p class="text-xs sm:text-sm">Consommation</p>
+				</div>
 				<ul
-					class="flex max-h-72 flex-col gap-1 overflow-y-auto rounded-lg bg-gray-300 sm:max-w-md sm:gap-1"
+					class="custom-scrollbar flex max-h-78 flex-col gap-1 overflow-y-auto bg-gray-300 sm:max-w-md sm:gap-1"
 				>
 					{#each displayData as entry}
 						<li class=" flex justify-between bg-gray-100 p-1 text-xs sm:text-sm">
@@ -115,7 +120,6 @@
 					{/each}
 				</ul>
 			</div>
-
 			<div class="mb-2">
 				{#if !(total_pages <= 1 || page === 1)}
 					<ButtonPagination text="Previous Page" onClick={prevPage} />
