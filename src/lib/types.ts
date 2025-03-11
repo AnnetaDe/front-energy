@@ -9,13 +9,11 @@ export interface RangeParams {
 }
 
 export interface RangeResponse {
-    count: number;
-    per_page: number;
-    page: number;
-    total_pages: number;
+    limit: number;
+    total: number;
     offset: number;
     total_items: number;
-    data: any[];
-    total: number;
+    items: any[];
+
 }
 

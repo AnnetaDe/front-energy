@@ -4,5 +4,5 @@ services:
     ports:
       - "3000:80"
     environment:
-      - VITE_API_URL="https://energy-production-3537.up.railway.app"
+      - VITE_API_URL="http://127.0.0.1:8000/"
     restart: always

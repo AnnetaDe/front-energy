@@ -3,6 +3,9 @@
 	import ButtonPagination from '$lib/ButtonPagination.svelte';
 	import DateForm from '$lib/DateForm.svelte';
 	import { Spinner } from 'flowbite-svelte';
+	import { convertToDate } from '$lib/convertToDate';
+
+	console.log('convertToDate:', convertToDate(1234567890));
 
 	let start_date = '2021-01-01';
 	let end_date = start_date;
@@ -13,11 +16,11 @@
 	let displayData: { date: string; heures: string; consommation: number }[] = [];
 	let loading = false;
 	let noDataMessage = false;
-	let per_page = 24;
+	let per_page = 6;
 	let offset: number;
 	let page: number;
 	let total_pages: number;
-	let total_consumption: number;
+
 	$: params = {
 		start_date: start_date,
 		end_date: end_date,
@@ -46,15 +49,14 @@
 
 			console.log('result:', result);
 			if (result && result.rangeData) {
-				displayData = result.rangeData.data || [];
+				displayData = result.rangeData.items || [];
 				if (displayData.length === 0) {
 					noDataMessage = true;
 				} else {
 					noDataMessage = false;
-					page = result.rangeData.page;
-					total_pages = result.rangeData.total_pages;
+					total_pages = result.rangeData.total / result.rangeData.limit;
 					offset = result.rangeData.offset;
-					total_consumption = result.rangeData.total;
+					page = Math.ceil(offset / per_page) + 1;
 				}
 			}
 		} catch (error) {
@@ -98,14 +100,14 @@
 		<div class="mb-2">
 			<h2 class="mb-2">Results</h2>
 			<div class="mb-2 flex-col justify-between rounded-lg bg-gray-300 p-2 text-xs sm:max-w-md">
-				<p>Page: {page}</p>
+				<p>Page number: {page}</p>
+				<p>Per Page: {per_page}</p>
 				<p>Total Pages: {total_pages}</p>
-				<p>Total Energy: {total_consumption}</p>
+				<p>Page: {page}</p>
 			</div>
 			<div class="mb-2 bg-gray-300 p-2 sm:max-w-md">
 				<div class="flex justify-between bg-gray-300 p-1 text-xs sm:text-sm">
 					<p class="text-xs sm:text-sm">Date</p>
-					<p class="text-xs sm:text-sm">Heures</p>
 					<p class="text-xs sm:text-sm">Consommation</p>
 				</div>
 				<ul
@@ -113,8 +115,8 @@
 				>
 					{#each displayData as entry}
 						<li class=" flex justify-between bg-gray-100 p-1 text-xs sm:text-sm">
-							<span class="text-md bg-gray-200 p-1">{entry.date}</span>
-							<span class="p-2">{entry.heures}</span>
+							<span class="text-md bg-gray-200 p-1">{convertToDate(Number(entry.date))}</span>
+
 							<span class="text-md bg-gray-200 p-1">{entry.consommation}</span>
 						</li>
 					{/each}
