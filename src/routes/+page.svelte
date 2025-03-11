@@ -5,8 +5,6 @@
 	import { Spinner } from 'flowbite-svelte';
 	import { convertToDate } from '$lib/convertToDate';
 
-	console.log('convertToDate:', convertToDate(1234567890));
-
 	let start_date = '2021-01-01';
 	let end_date = start_date;
 	let start_hour = '00:00:00';
@@ -16,10 +14,11 @@
 	let displayData: { date: string; heures: string; consommation: number }[] = [];
 	let loading = false;
 	let noDataMessage = false;
-	let per_page = 6;
+	let per_page = 8;
 	let offset: number;
 	let page: number;
 	let total_pages: number;
+	let total_entries: number;
 
 	$: params = {
 		start_date: start_date,
@@ -54,7 +53,9 @@
 					noDataMessage = true;
 				} else {
 					noDataMessage = false;
-					total_pages = result.rangeData.total / result.rangeData.limit;
+					total_entries = result.rangeData.total;
+
+					total_pages = Math.ceil(result.rangeData.total / result.rangeData.limit);
 					offset = result.rangeData.offset;
 					page = Math.ceil(offset / per_page) + 1;
 				}
@@ -76,6 +77,16 @@
 		if (offset <= 0) return;
 		offset = offset - per_page;
 		fetchData({ ...params, offset });
+	}
+	function changePerPage(event: Event) {
+		per_page = Math.min(parseInt((event.target as HTMLInputElement).value, 10), total_entries);
+		fetchData({ ...params, limit: per_page });
+	}
+	function validatePerPage(event: Event) {
+		const input = event.target as HTMLInputElement;
+		if (parseInt(input.value, 10) < 1) {
+			input.value = '1';
+		}
 	}
 </script>
 
@@ -102,8 +113,21 @@
 			<div class="mb-2 flex-col justify-between rounded-lg bg-gray-300 p-2 text-xs sm:max-w-md">
 				<p>Page number: {page}</p>
 				<p>Per Page: {per_page}</p>
-				<p>Total Pages: {total_pages}</p>
+
 				<p>Page: {page}</p>
+				<p>Total entries {total_entries}</p>
+			</div>
+			<div class="mb-2 w-1/4 bg-gray-300 p-2">
+				<label for="perPage">Per Page</label>
+				<input
+					class="mb-2 w-1/4 p-1"
+					id="perPage"
+					type="number"
+					min="1"
+					value={per_page}
+					on:change={changePerPage}
+					on:input={validatePerPage}
+				/>
 			</div>
 			<div class="mb-2 bg-gray-300 p-2 sm:max-w-md">
 				<div class="flex justify-between bg-gray-300 p-1 text-xs sm:text-sm">
